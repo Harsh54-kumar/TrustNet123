@@ -149,6 +149,9 @@ export default function UserDetail() {
     );
   }
 
+  const displayName = userDetail?.fullName || userDetail?.username || 'Unnamed User';
+  const avatarInitial = displayName.charAt(0).toUpperCase();
+
   return (
     <div className="user-detail-wrapper">
       {/* Back button */}
@@ -161,15 +164,15 @@ export default function UserDetail() {
       <div className="user-profile-header-card">
         <div className="user-profile-avatar-wrapper">
           {userDetail?.avatarUrl ? (
-            <img src={userDetail.avatarUrl} alt={userDetail.fullName || 'User avatar'} className="profile-img-lg" />
+            <img src={userDetail.avatarUrl} alt={displayName} className="profile-img-lg" />
           ) : (
             <span className="profile-init-lg">
-              {userDetail?.fullName ? userDetail.fullName.charAt(0).toUpperCase() : 'U'}
+              {avatarInitial}
             </span>
           )}
         </div>
         <div className="user-profile-text-wrapper">
-          <h2 className="user-profile-name">{userDetail?.fullName}</h2>
+          <h2 className="user-profile-name">{displayName}</h2>
           <div className="user-profile-username">@{userDetail?.username || 'username'}</div>
           <div className="user-profile-meta-row">
             <span className="meta-icon-item" title="Role">

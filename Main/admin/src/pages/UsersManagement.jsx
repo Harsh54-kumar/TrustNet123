@@ -242,78 +242,82 @@ export default function UsersManagement() {
 
     return (
       <tbody>
-        {users.map((item) => (
-          <tr key={item._id || item.id}>
-            <td>
-              <div className="user-info-cell">
-                <div className="user-avatar-initial">
-                  {item.fullName ? item.fullName.charAt(0).toUpperCase() : 'U'}
+        {users.map((item) => {
+          const displayName = item.fullName || item.username || 'Unnamed User';
+          const avatarInitial = displayName.charAt(0).toUpperCase();
+          return (
+            <tr key={item._id || item.id}>
+              <td>
+                <div className="user-info-cell">
+                  <div className="user-avatar-initial">
+                    {avatarInitial}
+                  </div>
+                  <div className="user-text-details">
+                    <span className="user-full-name">{displayName}</span>
+                    <span className="user-email-label">{item.email}</span>
+                  </div>
                 </div>
-                <div className="user-text-details">
-                  <span className="user-full-name">{item.fullName}</span>
-                  <span className="user-email-label">{item.email}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <span className="user-role-badge">{item.role}</span>
-            </td>
-            <td>
-              <StatusBadge status={item.verificationStatus || 'pending'} />
-            </td>
-            <td>
-              <span className={`status-pill ${item.isActive ? 'active' : 'suspended'}`}>
-                {item.isActive ? 'Active' : 'Suspended'}
-              </span>
-            </td>
-            <td>
-              <span className="user-joined-date">{formatDate(item.createdAt)}</span>
-            </td>
-            <td>
-              <div className="actions-button-group">
-                <Link to={`/admin/users/${item._id || item.id}`} className="action-icon-btn" title="View Profile">
-                  <Eye size={15} />
-                </Link>
-                {item.verificationStatus === 'pending' && (
-                  <Link to={`/admin/verification/${item._id || item.id}`} className="action-icon-btn highlight" title="Audit Verification">
-                    <Shield size={15} />
+              </td>
+              <td>
+                <span className="user-role-badge">{item.role}</span>
+              </td>
+              <td>
+                <StatusBadge status={item.verificationStatus || 'pending'} />
+              </td>
+              <td>
+                <span className={`status-pill ${item.isActive ? 'active' : 'suspended'}`}>
+                  {item.isActive ? 'Active' : 'Suspended'}
+                </span>
+              </td>
+              <td>
+                <span className="user-joined-date">{formatDate(item.createdAt)}</span>
+              </td>
+              <td>
+                <div className="actions-button-group">
+                  <Link to={`/admin/users/${item._id || item.id}`} className="action-icon-btn" title="View Profile">
+                    <Eye size={15} />
                   </Link>
-                )}
-                <button 
-                  className="action-icon-btn" 
-                  title="Modify Role"
-                  onClick={() => openActionModal('role', item)}
-                >
-                  <SlidersHorizontal size={14} />
-                </button>
-                {item.isActive ? (
+                  {item.verificationStatus === 'pending' && (
+                    <Link to={`/admin/verification/${item._id || item.id}`} className="action-icon-btn highlight" title="Audit Verification">
+                      <Shield size={15} />
+                    </Link>
+                  )}
+                  <button 
+                    className="action-icon-btn" 
+                    title="Modify Role"
+                    onClick={() => openActionModal('role', item)}
+                  >
+                    <SlidersHorizontal size={14} />
+                  </button>
+                  {item.isActive ? (
+                    <button 
+                      className="action-icon-btn danger" 
+                      title="Suspend Account"
+                      onClick={() => openActionModal('suspend', item)}
+                    >
+                      <UserMinus size={15} />
+                    </button>
+                  ) : (
+                    <button 
+                      className="action-icon-btn success" 
+                      title="Reactivate Account"
+                      onClick={() => openActionModal('reactivate', item)}
+                    >
+                      <UserCheck size={15} />
+                    </button>
+                  )}
                   <button 
                     className="action-icon-btn danger" 
-                    title="Suspend Account"
-                    onClick={() => openActionModal('suspend', item)}
+                    title="Soft Delete Account"
+                    onClick={() => openActionModal('delete', item)}
                   >
-                    <UserMinus size={15} />
+                    <Trash2 size={14} />
                   </button>
-                ) : (
-                  <button 
-                    className="action-icon-btn success" 
-                    title="Reactivate Account"
-                    onClick={() => openActionModal('reactivate', item)}
-                  >
-                    <UserCheck size={15} />
-                  </button>
-                )}
-                <button 
-                  className="action-icon-btn danger" 
-                  title="Soft Delete Account"
-                  onClick={() => openActionModal('delete', item)}
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            </td>
-          </tr>
-        ))}
+                </div>
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     );
   };
